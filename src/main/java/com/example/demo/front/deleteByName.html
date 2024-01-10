@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete By Name</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Delete student by name</h1>
+
+<form onsubmit="fetchStudents(); return false;">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name"><br><br>
+  <button type="submit">DELETE</button>
+</form>
+
+<script>
+  function fetchStudents() {
+    const name = document.getElementById("name").value;
+    const url = `http://localhost:8080/student/${name}`;
+
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+            .then(response => {
+              if (response.ok) {
+                console.log('Zapytanie DELETE zostało wysłane');
+              } else {
+                console.error('Wystąpił problem podczas wysyłania zapytania DELETE');
+              }
+            })
+            .catch(error => {
+              console.error('Błąd podczas wysyłania zapytania DELETE:', error);
+            });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Get Student By Name</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Get Student By Name</h1>
+
+<form onsubmit="fetchStudents(); return false;">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name"><br><br>
+  <button type="submit">Get Student</button>
+</form>
+
+<div id="studentInfo"></div>
+
+<script>
+  function fetchStudents() {
+    const studentId = document.getElementById('name').value;
+    const apiUrl = `http://localhost:8080/student/x/${studentId}`;
+
+    fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+              const studentInfo = document.getElementById('studentInfo');
+              studentInfo.innerHTML = '';
+
+              data.forEach(student => {
+                const studentData = document.createElement('div');
+                studentData.innerHTML = `
+            <strong>ID:</strong> ${student.id}<br>
+            <strong>First Name:</strong> ${student.firstName}<br>
+            <strong>Last Name:</strong> ${student.lastName}<br>
+            <strong>Age:</strong> ${student.age}<br>
+            <strong>Course:</strong> ${student.course}<br><br>
+          `;
+                studentInfo.appendChild(studentData);
+              });
+            })
+            .catch(error => {
+              console.error('Błąd pobierania danych:', error);
+            });
+  }
+</script>
+
+</body>
+</html>

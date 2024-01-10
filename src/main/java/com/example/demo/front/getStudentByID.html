@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Get Student By ID</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Get Student By ID</h1>
+
+<form onsubmit="fetchStudents(); return false;">
+  <label for="id">ID:</label><br>
+  <input type="number" id="id" name="id"><br><br>
+  <button type="submit">Get Student</button>
+</form>
+
+<ul id="studentList"></ul>
+
+<script>
+  function fetchStudents(){
+    const idInput = document.getElementById('id');
+    const studentList = document.getElementById('studentList');
+    const id = idInput.value;
+
+    fetch(`http://localhost:8080/student/${id}`)
+            .then(response => response.json())
+            .then(student => {
+              studentList.innerHTML = '';
+              const itemList = document.createElement('li');
+              itemList.innerHTML = `
+                <strong>ID:</strong> ${student.id}<br>
+                <strong>First Name:</strong> ${student.firstName}<br>
+                <strong>Last Name:</strong> ${student.lastName}<br>
+                <strong>Age:</strong> ${student.age}<br>
+                <strong>Course:</strong> ${student.course}
+              `;
+              studentList.appendChild(itemList);
+            })
+            .catch(error => console.error(error));
+  }
+</script>
+</body>
+</html>

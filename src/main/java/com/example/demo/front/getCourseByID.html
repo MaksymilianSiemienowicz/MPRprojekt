@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Get Course By ID</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Get Course By ID</h1>
+
+<form onsubmit="fetchCourse(); return false;">
+  <label for="id">ID:</label><br>
+  <input type="number" id="id" name="id"><br><br>
+  <button type="submit">Get Course</button>
+</form>
+
+<ul id="courseDetails"></ul>
+
+<script>
+  function fetchCourse(){
+    const idInput = document.getElementById('id');
+    const courseDetails = document.getElementById('courseDetails');
+    const id = idInput.value;
+
+    fetch(`http://localhost:8080/course/${id}`)
+            .then(response => response.json())
+            .then(course => {
+              courseDetails.innerHTML = '';
+
+              const itemDetails = document.createElement('li');
+              itemDetails.innerHTML = `
+                <strong>ID:</strong> ${course.id}<br>
+                <strong>Name:</strong> ${course.name}<br>
+                <strong>Lecture Last Name:</strong> ${course.lectureLastName}<br>
+                <strong>Department:</strong> ${course.department}
+              `;
+              courseDetails.appendChild(itemDetails);
+            })
+            .catch(error => console.error(error));
+  }
+</script>
+</body>
+</html>

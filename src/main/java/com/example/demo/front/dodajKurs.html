@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dodaj Kurs</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h2>Dodaj Kurs</h2>
+
+<form id="myForm">
+  <label for="nazwa">Nazwa:</label><br>
+  <input type="text" id="nazwa" name="nazwa"><br><br>
+
+  <label for="departament">Departament:</label><br>
+  <select id="departament" name="departament">
+    <option value="WROCLAW">Wrocław</option>
+    <option value="KATOWICE">KATOWICE</option>
+  </select><br><br>
+
+  <label for="lectureLastName">Nazwisko wykładowcy:</label><br>
+  <input type="text" id="lectureLastName" name="lectureLastName"><br><br>
+
+  <button type="button" onclick="wyslij()">Wyślij</button>
+</form>
+
+<script>
+  function wyslij() {
+    const form = document.getElementById('myForm');
+    const nazwa = form.elements['nazwa'].value;
+    const departament = form.elements['departament'].value;
+    const lectureLastName = form.elements['lectureLastName'].value;
+
+    const dataToSend = {
+      name: nazwa,
+      departament: departament,
+      lectureLastName: lectureLastName
+    };
+
+    fetch('http://localhost:8080/course', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataToSend)
+    })
+            .then(response => {
+              console.log('Odpowiedź z serwera:', response);
+              alert('Dane zostały wysłane pomyślnie!');
+            })
+            .catch(error => {
+              // Obsługa błędów
+              console.error('Błąd:', error);
+              alert('Wystąpił błąd podczas wysyłania danych.');
+            });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dodaj Studenta</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h2>Dodaj Studenta</h2>
+
+<form id="myForm">
+  <label for="imie">Imię:</label><br>
+  <input type="text" id="imie" name="imie"><br><br>
+
+  <label for="wiek">Wiek:</label><br>
+  <input type="number" id="wiek" name="wiek"><br><br>
+
+  <label for="nazwisko">Nazwisko:</label><br>
+  <input type="text" id="nazwisko" name="nazwisko"><br><br>
+
+  <button type="button" onclick="wyslij()">Wyślij</button>
+</form>
+
+<script>
+  function wyslij() {
+    const form = document.getElementById('myForm');
+    const imie = form.elements['imie'].value;
+    const wiek = form.elements['wiek'].value;
+    const nazwisko = form.elements['nazwisko'].value;
+
+    const dataToSend = {
+      firstName: imie,
+      age: wiek,
+      lastName: nazwisko
+    };
+
+    fetch('http://localhost:8080/student', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataToSend)
+    })
+            .then(response => {
+              console.log('Odpowiedź z serwera:', response);
+              alert('Dane zostały wysłane pomyślnie!');
+            })
+            .catch(error => {
+              console.error('Błąd:', error);
+              alert('Wystąpił błąd podczas wysyłania danych.');
+            });
+  }
+</script>
+
+</body>
+</html>

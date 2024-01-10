@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MPR projekt</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<div id="Studenci">
+    <h1>Studenci: </h1>
+    <ul id="studentList"></ul>
+    <script>
+        function fetchStudents() {
+            fetch('http://localhost:8080/student')
+                .then(response => response.json())
+                .then(students => {
+                    const studentList = document.getElementById('studentList');
+                    students.forEach(student => {
+                        const itemList = document.createElement('li');
+                        itemList.innerHTML = `
+                            <strong>ID:</strong> ${student.id}<br>
+                            <strong>First Name:</strong> ${student.firstName}<br>
+                            <strong>Last Name:</strong> ${student.lastName}<br>
+                            <strong>Age:</strong> ${student.age}<br>
+                            <strong>Course:</strong> ${student.course}
+                        `;
+                        studentList.appendChild(itemList);
+                    })
+                })
+                .catch(error => console.error(error));
+        }
+
+        fetchStudents();
+    </script>
+</div>
+
+<div id="Kursy">
+    <h1>Kursy: </h1>
+    <ul id="courseList"></ul>
+    <script>
+        function fetchCourses() {
+            fetch('http://localhost:8080/course')
+                .then(response => response.json())
+                .then(courses => {
+                    const courseList = document.getElementById('courseList');
+                    courses.forEach(course => {
+                        const itemList = document.createElement('li');
+                        itemList.innerHTML = `
+                            <strong>ID:</strong> ${course.id}<br>
+                            <strong>Name:</strong> ${course.name}<br>
+                            <strong>Lecture Last Name:</strong> ${course.lectureLastName}<br>
+                            <strong>Department:</strong> ${course.departament}
+                        `;
+                        courseList.appendChild(itemList);
+                    })
+                })
+                .catch(error => console.error(error));
+        }
+
+        fetchCourses();
+    </script>
+</div>
+
+<div id="Buttons">
+    <button onclick="window.location.href='./dodajStudenta.html'">Dodaj Studenta</button>
+    <button onclick="window.location.href='./dodajKurs.html'">Dodaj Kurs</button>
+    <button onclick="window.location.href='./getStudentByID.html'">Get Student By ID</button>
+    <button onclick="window.location.href='./getCourseByID.html'">Get Course By ID</button>
+    <button onclick="window.location.href='./deleteByName.html'">Delete Student By Name</button>
+    <button onclick="window.location.href='./getStudentsByName.html'">Get Student By Name</button>
+    <button onclick="deleteManyStudents()">Delete Students with age less than 30</button>
+    <button onclick="fetchMaxAge()">Pobierz maksymalny wiek</button>
+    <button onclick="deleteWroclaw()">Usun wszystkie kursy z wroclawia</button>
+    <button onclick="getDepartamentForItCourse()">Pobierz departament dla kursu IT</button>
+</div>
+
+
+<script>
+    function getDepartamentForItCourse() {
+        var apiUrl = 'http://localhost:8080/course/DepartamentForIT';
+
+        fetch(apiUrl)
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => {
+                console.error('Błąd pobierania danych z API:', error);
+            });
+
+    }
+
+    function deleteWroclaw(){
+            const url = `http://localhost:8080/course/deleteWroclaw`;
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+    }
+
+
+
+    function deleteManyStudents(){
+        const url = `http://localhost:8080/student/DeleteStudents`;
+
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Zapytanie DELETE zostało wysłane');
+                } else {
+                    console.error('Wystąpił problem podczas wysyłania zapytania DELETE');
+                }
+            })
+            .catch(error => {
+                console.error('Błąd podczas wysyłania zapytania DELETE:', error);
+            });
+    }
+    function fetchMaxAge() {
+        fetch('http://localhost:8080/student/maxAge')
+            .then(response => response.json())
+            .then(maxAge => {
+                alert("Maksymalny wiek to: " + maxAge);
+            })
+            .catch(error => console.error(error));
+    }
+</script>
+</body>
+</html>
